@@ -1,10 +1,11 @@
 """Routes for user management"""
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from passlib.hash import bcrypt
 from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.database import get_db
+from app.exceptions import HttpError
 
 router = APIRouter(prefix='/users', tags=['Users'])
 
@@ -18,7 +19,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     )
 
     if existing_user:
-        raise HTTPException(status_code=400, detail='User already exists')
+        HttpError.user_already_exists()
 
     hashed_password = bcrypt.hash(user.password)
     new_user = models.User(
