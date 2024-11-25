@@ -17,7 +17,7 @@ class User(Base):
     permission_level = Column(
         Enum('admin', 'user'), name='permission_level', default='user'
     )
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f'User(name="{self.name}", email="{self.email}")'
