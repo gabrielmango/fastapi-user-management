@@ -9,3 +9,8 @@ class HttpError(HTTPException):
     def user_already_exists(message: str = 'User already exists'):
         """Return HTTP 400 Bad Request error with user already exists message."""
         raise HttpError(status_code=400, detail=message)
+
+    @staticmethod
+    def bad_request(message: str = 'Invalid request'):
+        """Return HTTP 400 Bad Request error with invalid request message."""
+        raise HttpError(status_code=400, detail=message)
