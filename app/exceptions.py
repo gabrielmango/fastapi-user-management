@@ -14,3 +14,8 @@ class HttpError(HTTPException):
     def bad_request(message: str = 'Invalid request'):
         """Return HTTP 400 Bad Request error with invalid request message."""
         raise HttpError(status_code=400, detail=message)
+
+    @staticmethod
+    def not_found(message: str):
+        """Return HTTP 404 Not Found error with not found message."""
+        raise HttpError(status_code=404, detail=f'{message} not found')
