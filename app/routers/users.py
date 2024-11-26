@@ -1,6 +1,9 @@
 """Routes for user management"""
+from urllib.parse import unquote
+
 from fastapi import APIRouter, Depends
 from passlib.hash import bcrypt
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -53,3 +56,16 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     if user:
         return user
     raise HttpError.not_found(f'User id {user_id}')
+
+
+@router.delete('/{user_id}', response_model=schemas.UserResponse)
+def delete_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    """Delete a user by their ID."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if not user:
+        raise HttpError.not_found(f'User id {user_id}')
+
+    db.delete(user)
+    db.commit()
+    return {'message': f'User with ID {user_id} was successfully deleted.'}
