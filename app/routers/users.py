@@ -43,3 +43,13 @@ def list_all_users(db: Session = Depends(get_db)):
     if users:
         return users
     return []
+
+
+@router.get('/{user_id}', response_model=schemas.UserResponse)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    """Returns a user by their ID."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if user:
+        return user
+    raise HttpError.not_found(f'User id {user_id}')
