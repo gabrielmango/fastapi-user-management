@@ -33,3 +33,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+@router.get('/', response_model=list[schemas.UserResponse])
+def list_all_users(db: Session = Depends(get_db)):
+    """Returns a list of all users."""
+    users = db.query(models.User).all()
+
+    if users:
+        return users
+    return []
